@@ -1,12 +1,17 @@
 fn main() {
     let mut s: char = 'a'; // RUSTC:    mov     dword ptr [rsp - 4], 97
 
+    let str1 = "Microsoft Edge"; // Is of type &str (not String!)
+
     let mut s1 = String::new();
     s1 = "Anton".to_string();
 
     s1.push_str(" Yarkov"); // OR +=
 
     println!("s1: {}", s1);
+
+    let str2 = &s1[0..5];
+    println!("Slice of s1: {str2}");
 
     let mut s2 = String::from("Hello");
     s2 += " World!"; // OR s2.push_str(...)
