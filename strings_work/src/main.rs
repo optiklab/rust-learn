@@ -6,9 +6,18 @@ fn main() {
 
     s1.push_str(" Yarkov"); // OR +=
 
-    println!("{}", s1);
+    println!("s1: {}", s1);
 
     let mut s2 = String::from("Hello");
     s2 += " World!"; // OR s2.push_str(...)
-    println!("{}", s2);
+    println!("s2: {}", s2);
+
+    let s3 = s2; // MOVE
+    println!("s3: {} (s2 moved to s3)", s3);
+    println!("(s2 freed)");
+    //println!("{}", s2); // COMPILE ERROR
+
+    let s4 = s3.clone(); // CLONE
+    println!("s4: {} (s3 cloned to s4)", s4);
+    println!("s3: {} (s3 still alive)", s3);
 }

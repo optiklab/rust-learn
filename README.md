@@ -1,3 +1,5 @@
+rustup
+
 cd hello_world
 rustc main.rs
 
