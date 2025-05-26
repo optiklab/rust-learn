@@ -22,12 +22,26 @@ fn main() {
     println!("s3: {} (s3 still alive)", s3);
 
     copy_or_not();
+    move_my_string(s4);
+    //println!("{}", s4); // COMPILE ERROR! It's moved.
+
+    dont_move_my_char(s); // OK. It's copied!
 }
 
-pub fn copy_or_not() {
+fn copy_or_not() {
     let tup1: (i32, i32) = (1, 2);
     let (x, y) = tup1; // COPY
 
     let tup2: (i32, String) = (1, "2".to_string());
     let (x, y) = tup2; // MOVE
+}
+
+fn move_my_string(str: String) {
+
+    println!("{}", str);
+}
+
+fn dont_move_my_char(symbol: char) {
+
+    println!("{}", symbol);
 }

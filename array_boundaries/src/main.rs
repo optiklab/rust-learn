@@ -58,13 +58,13 @@ fn main() {
         std::io::stdin().read_line(&mut index)
             .expect("Failed to read line"); 
 
-        let index_number : u32 = match index.trim().parse() {
+        let index_number : usize = match index.trim().parse() {
             Ok(num) => num,
             Err(_) => continue
         };
 
         println!("Index selected: {}", index_number);
-        //TODO println!("Element Found by Index: {}", a[index_number]); // ERROR but WHY?
+        println!("Element Found by Index: {}", c[index_number]); // POTENTIAL PANIC!!!
         break;
     }
     println!("END");
