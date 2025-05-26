@@ -97,10 +97,11 @@ fn calculate_length(s: String) -> (String, usize) {
 
 fn return_cortage_by_ref() {
     let s1 = String::from("hello");
-    let len = calculate_length_ref(&s1);
+    let len = calculate_length_ref(&s1); // s1 passed as a reference - not move.
+                                   // but value is immutable - can't change!
     println!("The length of '{s1}' is {len}.");
 }
 
 fn calculate_length_ref(s: &String) -> usize {
     s.len()
-}
+}  // Nothing happens with s, because it was not owned.
