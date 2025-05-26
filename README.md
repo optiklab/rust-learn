@@ -1,3 +1,9 @@
+godbolt.org > rustc > --emit=llvm-ir
+                        -C opt-level=3
+                        -C opt-level=2
+                        -C opt-level=1
+
+
 rustup
 
 cd hello_world

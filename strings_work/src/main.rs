@@ -20,4 +20,14 @@ fn main() {
     let s4 = s3.clone(); // CLONE
     println!("s4: {} (s3 cloned to s4)", s4);
     println!("s3: {} (s3 still alive)", s3);
+
+    copy_or_not();
+}
+
+pub fn copy_or_not() {
+    let tup1: (i32, i32) = (1, 2);
+    let (x, y) = tup1; // COPY
+
+    let tup2: (i32, String) = (1, "2".to_string());
+    let (x, y) = tup2; // MOVE
 }
