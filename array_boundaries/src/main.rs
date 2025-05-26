@@ -64,7 +64,7 @@ fn main() {
         };
 
         println!("Index selected: {}", index_number);
-        //TODO println!("Element Found by Index: {}", a[index_number]);
+        //TODO println!("Element Found by Index: {}", a[index_number]); // ERROR but WHY?
         break;
     }
     println!("END");
