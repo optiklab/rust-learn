@@ -110,10 +110,11 @@ fn create_rect() {
     };
 
     println!(
-        "The area of the rectangle is {} square pixels for rect {:?}",
-        area_rect(&rect1),
-        rect1
+        "The area of the rectangle is {} square pixels.", 
+        area_rect(&rect1)
     );
+    println!("Rect is {:?}", rect1);
+    println!("Rect is {:#?}", rect1);
 }
 
 fn area_rect(rectangle: &Rectangle) -> u32 {
