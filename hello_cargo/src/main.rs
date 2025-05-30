@@ -23,7 +23,8 @@ fn main() {
     if sq > x {
         println!("square x: {}", sq);
     } else {
-        println!("Something went wrong with square!")
+        // Panic
+        assert!(time_elapsed > 0, "Something went wrong with square");
     }
 
     let z = if true {
