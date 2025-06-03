@@ -1,11 +1,14 @@
 use std::fmt;
 
+// When you need to store different types of data in a single vector, you can use enums.
+// This is useful for representing different types of cells in a spreadsheet.
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
     Text(String),
 }
 
+// Implementing the Display trait for SpreadsheetCell allows us to print the enum variants in a user-friendly way.
 impl fmt::Display for SpreadsheetCell {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {

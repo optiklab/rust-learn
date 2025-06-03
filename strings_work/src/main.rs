@@ -7,6 +7,7 @@ fn main() {
     s1 = "Anton".to_string();
 
     s1.push_str(" Yarkov"); // OR +=
+    s1.push('!'); // one byte char
 
     println!("s1: {}", s1);
 
@@ -30,12 +31,26 @@ fn main() {
     move_my_string(s4);
     //println!("{}", s4); // COMPILE ERROR! It's moved. https://doc.rust-lang.org/stable/book/ch04-01-what-is-ownership.html
 
+    let str1 = String::from("Hello, ");
+    let str2 = String::from("world!");
+    let str3 = str1 + &str2; // note s1 has been moved here and can no longer be used
+
+    let tic1 = String::from("tic");
+    let tac = String::from("tac");
+    let toe = String::from("toe");
+    let tictactoe = tic1 + "-" + &tac + "-" + &toe;
+
+    let tic2 = String::from("tic"); // We cannot use tic1 anymore, but we can use tic2.
+    let tictactoe_formatted = format!("{tic2}-{tac}-{toe}"); // format!() does not move, it copies
+
     dont_move_my_char(s); // OK. It's copied!
 
     conventional_example_of_moves();
 
     return_cortage_by_moves();
     return_cortage_by_ref();
+
+    slicing();
 }
 
 fn copy_or_not() {
@@ -110,3 +125,39 @@ fn return_cortage_by_ref() {
 fn calculate_length_ref(s: &String) -> usize {
     s.len()
 }  // Nothing happens with s, because it was not owned.
+
+fn slicing() {
+    let hello = "Здравствуйте";
+    let s = &hello[0..4];
+
+    println!("Slice &hello[0..4] of '{hello}': {s}"); // Prints "Зд"
+    // println!("{}", &hello[0]); // COMPILE ERROR! UTF-8 chars are not 1 byte long.
+    println!("Slice &hello[0..2] of '{hello}': {}", &hello[0..2]);
+    // println!("{}", &hello[0..1]); // COMPILE ERROR! UTF-8 chars are not 1 byte long.
+    println!("Length of '{hello}': {}", hello.len());
+
+    println!("Print '{hello}' char by char: {} chars in total", hello.chars().count());
+    for c in hello.chars() {
+        println!("{c}");
+    }
+
+    println!("Print '{hello}' byte by byte: {} bytes in total", hello.as_bytes().len());
+    let mut bytesString = String::new();
+    for b in hello.bytes() {
+        bytesString.push_str(&format!("{b}, "));
+    }
+    bytesString.pop(); // Remove the last comma
+    bytesString.pop(); // Remove the last space
+    println!("{bytesString}");
+
+    println!("Length of '{s}': {}", s.len());
+
+    let hindi = "नमस्ते";
+    println!("'{hindi}': {} chars in total", hindi.chars().count());
+    
+    for c in hindi.chars() {
+        println!("{c}");
+    }
+
+    println!("'{hindi}': {} bytes in total", hindi.bytes().count());
+}
