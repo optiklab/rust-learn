@@ -16,6 +16,7 @@ cargo new hello_cargo
 cd hello_cargo
 cargo build
 cargo run
+RUST_BACKTRACE=1 cargo run
 cargo check - just to check if it compiles
 
 cargo new guessing_game
@@ -25,3 +26,5 @@ cargo update
 cargo doc --open
 
 cargo new array_boundaries
+
+

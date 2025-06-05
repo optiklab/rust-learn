@@ -3,8 +3,23 @@ fn main() {
 
     let str1 = "Microsoft Edge"; // Is of type &str (not String!)
 
+    println!("A String is always {:?} bytes. It is Sized.",
+        std::mem::size_of::<String>()); // Prints the size in bytes of a type.
+        // 24 - it is composed of
+            // a pointer (8 bytes on 64bit systems) to the heap, 
+            // a 8 byte length,
+            // and a 8 byte capacity.
+
+    println!("&str can be anything. '서태지' is {:?} bytes. It is not Sized.", 
+        std::mem::size_of_val("서태지")); // gives you the size in bytes of a variable
+    println!("'Adrian Fahrenheit Țepeș' is {:?} bytes. It is not Sized.", 
+        std::mem::size_of_val("Adrian Fahrenheit Țepeș"));
+
     let mut s1 = String::new();
+    println!("s1 len: {}", s1.len()); // Prints 0
+    
     s1 = "Anton".to_string();
+    println!("s1 len: {}", s1.len());
 
     s1.push_str(" Yarkov"); // OR +=
     s1.push('!'); // one byte char
