@@ -1,5 +1,11 @@
 pub trait Summary {
-    fn summarize(&self) -> String;
+    // Without default implementation
+    //fn summarize(&self) -> String;
+
+    // With default implementation
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
 }
 
 pub struct NewsArticle {
@@ -27,3 +33,12 @@ impl Summary for SocialPost {
         format!("{}: {}", self.username, self.content)
     }
 }
+
+pub struct User {
+    pub username: String,
+    pub userid: String,
+    pub birthdate: String
+}
+
+// No specific implementation for User, so it uses the default.
+impl Summary for User {}
