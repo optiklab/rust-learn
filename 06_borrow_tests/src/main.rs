@@ -28,6 +28,11 @@ fn slices_test2() {
 }
 
 fn first_word(s: &String) -> &str {
+// An actual function declaration is looking like this:
+//fn first_word<'a>(s: &'a str) -> &'a str {
+// but we skip and shorten it due to #2 rule of Lifetime Elision Rules of Rust 
+// (if there is exactly one input lifetime parameter, 
+// that lifetime is assigned to all output lifetime parameters.
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
