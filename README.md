@@ -27,4 +27,6 @@ cargo doc --open
 
 cargo new array_boundaries
 
+cargo test
+
 
