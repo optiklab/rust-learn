@@ -13,9 +13,17 @@ $> rustc main.rs
 
 $> cargo --version
 
+#Create App project
+
 $> cargo new hello_cargo
 
 $> cd hello_cargo
+
+#Create lib project
+
+$>cargo new adder --lib
+
+#Build and run project
 
 $> cargo build
 

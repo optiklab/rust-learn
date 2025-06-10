@@ -1,12 +1,13 @@
-fn main() {
-    println!("Hello, world!");
-}
-
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
-#[cfg(test)]
+// You should put unit tests in the src directory in each file with the code 
+// that they’re testing. The convention is to create a module named tests
+// in each file to contain the test functions and
+// to annotate the module with cfg(test).
+
+#[cfg(test)] // the attribute cfg stands for configuration and tells Rust that the following item should only be included given a certain configuration option 'test'.
 mod add_tests {
     use super::*;
 
