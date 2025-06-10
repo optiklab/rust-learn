@@ -1,5 +1,7 @@
 use std::env;
+use std::error::Error;
 use std::fs;
+use std::process;
 
 // cargo run -- the poem.txt
 fn main() {
@@ -20,13 +22,16 @@ fn main() {
     let config = Config::build(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         println!("Usage: {} <search_query> <file.ext>", args[0]);
-        std::process::exit(1); // Exit with error code 1
+        process::exit(1); // Exit with error code 1
     });
 
     println!("Searching for '{}'", config.search_query);
     println!("In file '{}'", config.file_path);
 
-    run(config);
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1); // Exit with error code 1
+    }
 }
 
 struct Config {
@@ -67,10 +72,9 @@ impl Config {
     }*/
 }
 
-fn run(config: Config) {
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
-    let contents = fs::read_to_string(&config.file_path)
-        .expect("Should have been able to read the file");
+    let contents = fs::read_to_string(&config.file_path)?;
 
     println!("With text:\n{contents}");
 
@@ -82,6 +86,8 @@ fn run(config: Config) {
     } else {
         println!("'{}' not found in the file.", config.search_query);
     }
+    
+    Ok(())
 }
 
 /*
