@@ -1,9 +1,37 @@
 use std::env;
-use std::error::Error;
-use std::fs;
 use std::process;
 
+use minigrep::Config;
+
 // cargo run -- the poem.txt
+fn main() {
+
+    let args: Vec<String> = env::args() // std::env::args will panic 
+    // if any argument contains invalid Unicode. If your program needs to accept 
+    // arguments containing invalid Unicode, use std::env::args_os instead. 
+    // That function returns an iterator that produces OsString values 
+    // instead of String values. We’ve chosen to use std::env::args here 
+    // for simplicity because OsString values differ per platform and 
+    // are more complex to work with than String values.
+    .collect(); // collect function may create many kinds of collections, 
+                // so we explicitly annotate the type we expect: Vec<String>
+
+    let config = minigrep::Config::build(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {err}");
+        println!("Usage: {} <search_query> <file.ext>", args[0]);
+        process::exit(1); // Exit with error code 1
+    });
+
+    println!("Searching for '{}'", config.search_query);
+    println!("In file '{}'", config.file_path);
+
+    if let Err(e) = minigrep::run(config) {
+        println!("Application error: {e}");
+        process::exit(1); // Exit with error code 1
+    }
+}
+
+/*
 fn main() {
 
     let args: Vec<String> = env::args() // std::env::args will panic 
@@ -33,6 +61,7 @@ fn main() {
         process::exit(1); // Exit with error code 1
     }
 }
+
 
 struct Config {
     search_query: String,
@@ -89,6 +118,8 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
     
     Ok(())
 }
+*/
+
 
 /*
 fn parse_inputs(args: &[String]) -> Config { // (&str, &str) {
