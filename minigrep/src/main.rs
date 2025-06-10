@@ -26,10 +26,7 @@ fn main() {
     println!("Searching for '{}'", config.search_query);
     println!("In file '{}'", config.file_path);
 
-    let contents = fs::read_to_string(config.file_path)
-        .expect("Should have been able to read the file");
-
-    println!("With text:\n{contents}");
+    run(config);
 }
 
 struct Config {
@@ -68,6 +65,23 @@ impl Config {
             file_path: args[2].clone(), // https://doc.rust-lang.org/stable/book/ch13-00-functional-features.html
         }
     }*/
+}
+
+fn run(config: Config) {
+
+    let contents = fs::read_to_string(&config.file_path)
+        .expect("Should have been able to read the file");
+
+    println!("With text:\n{contents}");
+
+    // Here you can add the logic to search for config.search_query in contents
+    // For example, you can use regex or simple string matching.
+    // This is just a placeholder for demonstration.
+    if contents.contains(&config.search_query) {
+        println!("Found '{}' in the file!", config.search_query);
+    } else {
+        println!("'{}' not found in the file.", config.search_query);
+    }
 }
 
 /*
