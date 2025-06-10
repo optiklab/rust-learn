@@ -2,10 +2,21 @@ pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
+pub fn add_two(a: usize) -> usize {
+    internal_adder(a, 2)
+}
+
+// Internal functions are still accessible in tests.
+fn internal_adder(left: usize, right: usize) -> usize {
+    left + right
+}
+
 // You should put unit tests in the src directory in each file with the code 
 // that they’re testing. The convention is to create a module named tests
 // in each file to contain the test functions and
 // to annotate the module with cfg(test).
+
+// Test code is compiled only in case we run `cargo test` configuration.
 
 #[cfg(test)] // the attribute cfg stands for configuration and tells Rust that the following item should only be included given a certain configuration option 'test'.
 mod add_tests {
@@ -19,6 +30,12 @@ mod add_tests {
         assert_ne!(result, 5);
     }
     
+    #[test]
+    fn internal() {
+        let result = internal_adder(2, 2);
+        assert_eq!(result, 4);
+    }
+
     // Failing test. So we ignore it.
     #[test]    
     #[ignore]
