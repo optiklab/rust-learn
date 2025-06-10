@@ -18,11 +18,12 @@ mod add_tests {
         assert_ne!(result, 5);
     }
     
-    // Failing test.
-    //#[test]
-    //fn another() {
-    //    panic!("Make this test fail");
-    //}
+    // Failing test. So we ignore it.
+    #[test]    
+    #[ignore]
+    fn another() {
+        panic!("Make this test fail");
+    }
 
     // Writing tests so they return a Result<T, E> enables you 
     // to use the question mark operator in the body of tests, 
