@@ -3,7 +3,13 @@ use std::process;
 
 use minigrep::Config;
 
-// cargo run -- the poem.txt
+// Finds 2 lines with case sensitive search of "to" in poem.txt:
+// cargo run -- to poem.txt
+
+// If the environment variable is set, ignore case and find 4 lines:
+// $Env:IGNORE_CASE=1; cargo run -- to poem.txt
+// Remove-Item Env:IGNORE_CASE
+
 fn main() {
 
     let args: Vec<String> = env::args() // std::env::args will panic 
