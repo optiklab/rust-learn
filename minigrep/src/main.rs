@@ -23,7 +23,7 @@ fn main() {
                 // so we explicitly annotate the type we expect: Vec<String>
 
     let config = minigrep::Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {err}");
+        eprintln!("Problem parsing arguments: {err}");
         println!("Usage: {} <search_query> <file.ext>", args[0]);
         process::exit(1); // Exit with error code 1
     });
@@ -32,7 +32,7 @@ fn main() {
     println!("In file '{}'", config.file_path);
 
     if let Err(e) = minigrep::run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1); // Exit with error code 1
     }
 }

@@ -8,6 +8,24 @@ pub struct Config {
 }
 
 impl Config {
+    // JUST MY OWN INTERPRETATION OF THE BOOK... it is POSSIBLE to do this way, but the book suggests to use the build() method instead.
+    pub fn new(&mut self, args: &[String]) -> Result<&Config, &'static str> {
+
+        println!("Accpted: {:?}", args);
+        dbg!(&args);
+
+        if args.len() < 3 {        
+            return Err("Not enough arguments provided. Expected at least 2 arguments.");
+        }
+        self.search_query = args[1].clone(); // In Chapter 13, you’ll learn how to use more efficient methods than clone(). 
+        self.file_path = args[2].clone(); // https://doc.rust-lang.org/stable/book/ch13-00-functional-features.html
+        self.ignore_case = std::env::var("IGNORE_CASE").is_ok();  // If the environment variable is set, ignore case
+            // $Env:IGNORE_CASE=1; cargo run -- to poem.txt
+            // Remove-Item Env:IGNORE_CASE
+        
+        Ok(self)
+    }
+
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
 
         println!("Accpted: {:?}", args);
