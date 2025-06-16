@@ -26,12 +26,12 @@ godbolt.org > rustc > --emit=llvm-ir
 
 #Build and run project
 
+    $> cargo check - just to check if it compiles
+
     $> cargo build
 
     $> cargo run
     $> RUST_BACKTRACE=1 cargo run
-
-    $> cargo check - just to check if it compiles
 
 
     $> cargo new guessing_game
@@ -43,6 +43,10 @@ godbolt.org > rustc > --emit=llvm-ir
 
     $> cargo new array_boundaries
 
+#Explore
+
+    $> cargo install cargo-expand
+    $> cargo expand - to see how "derived" actually look like
 
 #Tests
 
