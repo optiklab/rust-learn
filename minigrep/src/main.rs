@@ -11,12 +11,14 @@ use minigrep::Config;
 // Remove-Item Env:IGNORE_CASE
 
 fn main() {
+    // https://doc.rust-lang.org/stable/book/ch13-03-improving-our-io-project.html
     let config = Config::build(env::args()).unwrap_or_else(|err| {
             eprintln!("Problem parsing arguments: {}", err);
             process::exit(1);
         });
 
 /*
+    // https://doc.rust-lang.org/stable/book/ch12-00-an-io-project.html
     let args: Vec<String> = env::args() // std::env::args will panic 
         // if any argument contains invalid Unicode. If your program needs to accept 
         // arguments containing invalid Unicode, use std::env::args_os instead. 

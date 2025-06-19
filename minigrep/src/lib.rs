@@ -14,6 +14,7 @@ impl Config {
 
     /*
     // Less efficient
+    // https://doc.rust-lang.org/stable/book/ch12-00-an-io-project.html
     pub fn new(&mut self, args: &[String]) -> Result<&Config, &'static str> {
 
         println!("Accpted: {:?}", args);
@@ -33,6 +34,7 @@ impl Config {
     */
 
     // More efficient
+    // https://doc.rust-lang.org/stable/book/ch13-03-improving-our-io-project.html
     pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
         args.next();
         let search_query = match args.next() {
@@ -49,6 +51,7 @@ impl Config {
     ///////////////////////////// End of OLD BOOK //////////////////////////////
     /*
     // Less efficient
+    // https://doc.rust-lang.org/stable/book/ch12-00-an-io-project.html
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
 
         println!("Accpted: {:?}", args);
@@ -68,6 +71,7 @@ impl Config {
     }
     */
     // More efficient!
+    // https://doc.rust-lang.org/stable/book/ch13-03-improving-our-io-project.html
     pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
         args.next();
 
@@ -119,6 +123,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
 /*
 // Old style
+// https://doc.rust-lang.org/stable/book/ch12-00-an-io-project.html
 fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
     
@@ -135,6 +140,7 @@ fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
 */
 
 // New way using filters and iterators
+// https://doc.rust-lang.org/stable/book/ch13-03-improving-our-io-project.html
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents
         .lines()
