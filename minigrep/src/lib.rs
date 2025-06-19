@@ -8,27 +8,47 @@ pub struct Config {
 }
 
 impl Config {
-    // Experiment
-        // JUST MY OWN INTERPRETATION OF THE BOOK... it is POSSIBLE to do this way, but the book suggests to use the build() method instead.
-        pub fn new(&mut self, args: &[String]) -> Result<&Config, &'static str> {
+    /////////////////////////////// OLD BOOK ///////////////////////////////////
+    // Interpretation of OLD version of book... it is POSSIBLE to do this way, 
+    // but the latest book suggests to use the build() method instead.
 
-            println!("Accpted: {:?}", args);
-            dbg!(&args);
+    /*
+    // Less efficient
+    pub fn new(&mut self, args: &[String]) -> Result<&Config, &'static str> {
 
-            if args.len() < 3 {        
-                return Err("Not enough arguments provided. Expected at least 2 arguments.");
-            }
-            self.search_query = args[1].clone(); // In Chapter 13, you’ll learn how to use more efficient methods than clone(). 
-            self.file_path = args[2].clone(); // https://doc.rust-lang.org/stable/book/ch13-00-functional-features.html
-            self.ignore_case = std::env::var("IGNORE_CASE").is_ok();  // If the environment variable is set, ignore case
-                // $Env:IGNORE_CASE=1; cargo run -- to poem.txt
-                // Remove-Item Env:IGNORE_CASE
-            
-            Ok(self)
+        println!("Accpted: {:?}", args);
+        dbg!(&args);
+
+        if args.len() < 3 {        
+            return Err("Not enough arguments provided. Expected at least 2 arguments.");
         }
+        self.search_query = args[1].clone(); // In Chapter 13, you’ll learn how to use more efficient methods than clone(). 
+        self.file_path = args[2].clone(); // https://doc.rust-lang.org/stable/book/ch13-00-functional-features.html
+        self.ignore_case = std::env::var("IGNORE_CASE").is_ok();  // If the environment variable is set, ignore case
+            // $Env:IGNORE_CASE=1; cargo run -- to poem.txt
+            // Remove-Item Env:IGNORE_CASE
+        
+        Ok(self)
+    }
+    */
 
-    // End of experiment
-
+    // More efficient
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        args.next();
+        let search_query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("No query for search"),
+        };
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("No filename"),
+        };
+        let ignore_case = std::env::var("IGNORE_CASE").is_ok(); 
+        Ok(Config { search_query, file_path, ignore_case })
+    }
+    ///////////////////////////// End of OLD BOOK //////////////////////////////
+    /*
+    // Less efficient
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
 
         println!("Accpted: {:?}", args);
@@ -44,6 +64,29 @@ impl Config {
             ignore_case: std::env::var("IGNORE_CASE").is_ok()  // If the environment variable is set, ignore case
                 // $Env:IGNORE_CASE=1; cargo run -- to poem.txt
                 // Remove-Item Env:IGNORE_CASE
+        })
+    }
+    */
+    // More efficient!
+    pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
+
+        let search_query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path"),
+        };
+
+        let ignore_case = std::env::var("IGNORE_CASE").is_ok();
+
+        Ok(Config {
+            search_query,
+            file_path,
+            ignore_case,
         })
     }
 }
@@ -74,6 +117,8 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+/*
+// Old style
 fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
     
@@ -86,6 +131,15 @@ fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
     results
 
     // vec![] // Empty vector
+}
+*/
+
+// New way using filters and iterators
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 fn search_ignore_case<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {

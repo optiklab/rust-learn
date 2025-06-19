@@ -11,7 +11,12 @@ use minigrep::Config;
 // Remove-Item Env:IGNORE_CASE
 
 fn main() {
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
+            eprintln!("Problem parsing arguments: {}", err);
+            process::exit(1);
+        });
 
+/*
     let args: Vec<String> = env::args() // std::env::args will panic 
         // if any argument contains invalid Unicode. If your program needs to accept 
         // arguments containing invalid Unicode, use std::env::args_os instead. 
@@ -21,12 +26,12 @@ fn main() {
         // are more complex to work with than String values.
         .collect(); // collect function may create many kinds of collections, 
                 // so we explicitly annotate the type we expect: Vec<String>
-
     let config = minigrep::Config::build(&args).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {err}");
         println!("Usage: {} <search_query> <file.ext>", args[0]);
         process::exit(1); // Exit with error code 1
     });
+*/
 
     println!("Searching for '{}'", config.search_query);
     println!("In file '{}'", config.file_path);
