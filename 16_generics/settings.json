@@ -1,0 +1,36 @@
+{
+    "chromiumide.metrics.showMessage": false,
+    "chromiumide.metrics.collectMetrics": true,
+    "workbench.colorTheme": "Visual Studio Light",
+    "cmake.showOptionsMovedNotification": false,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "workbench.editor.pinnedTabsOnSeparateRow": true,
+    "workbench.editor.wrapTabs": true,
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "clangd.path": "c:\\Users\\antonyarkov\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\18.1.3\\clangd_18.1.3\\bin\\clangd.exe",
+    "git.openRepositoryInParentFolders": "never",
+    "editor.rulers": [
+        80
+    ],
+    "remote.SSH.remotePlatform": {
+        "anton_linux": "linux"
+    },
+    "wavespace.defaultExtensions": {
+        "anton_linux": [
+            "ms-vscode.cpptools",
+            "rust-lang.rust-analyzer",
+            "ms-vscode.live-server"
+        ]
+    },
+    "remote.SSH.localServerDownload": "auto",
+    "explorer.confirmDelete": false,
+    "github.copilot.chat.codeGeneration.instructions": [
+
+    ],
+    "github.copilot.enable": {
+        "*": false
+    },
+}
