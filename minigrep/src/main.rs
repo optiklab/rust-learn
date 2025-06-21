@@ -1,10 +1,15 @@
 use std::env;
 use std::process;
 
-use minigrep::Config;
+use minigrep::minigrep_module;
+use minigrep::minigrep_module::Config;
 
 // Finds 2 lines with case sensitive search of "to" in poem.txt:
 // cargo run -- to poem.txt
+// 
+// OR
+// cd target/release
+// minigrep to "./../../poem.txt"   
 
 // If the environment variable is set, ignore case and find 4 lines:
 // $Env:IGNORE_CASE=1; cargo run -- to poem.txt
@@ -38,7 +43,7 @@ fn main() {
     println!("Searching for '{}'", config.search_query);
     println!("In file '{}'", config.file_path);
 
-    if let Err(e) = minigrep::run(config) {
+    if let Err(e) = minigrep_module::run(config) {
         eprintln!("Application error: {e}");
         process::exit(1); // Exit with error code 1
     }
