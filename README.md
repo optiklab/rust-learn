@@ -1,3 +1,22 @@
+# References
+
+1. Official free public book on [The Rust Programming Language](https://doc.rust-lang.org/stable/book/title-page.html)
+- [Language Reference](https://doc.rust-lang.org/reference/)
+- [Cargo Reference](https://doc.rust-lang.org/cargo)
+2. Set of easy exercises https://github.com/rust-lang/rustlings good to go in parallel while reading the book
+3. Set of exercises https://github.com/mainmatter/100-exercises-to-learn-rust with growing complexiy
+4. Dive deeper book [The Rustonomicon](https://doc.rust-lang.org/nomicon)
+5. Free course on Rust from [Google Android team](https://google.github.io/comprehensive-rust/)
+6. Introduction to [Rust in Chromium](https://google.github.io/comprehensive-rust/chromium)
+7. C++ and Rust interoperability:
+- [ref Chromium](https://google.github.io/comprehensive-rust/chromium/interoperability-with-cpp.html)
+- [ref The Book](https://doc.rust-lang.org/nomicon/ffi.html)
+8. Some nice Tips & Tricks in [Rust Antology](https://brson.github.io/rust-anthology)
+9. [Advanced on testing](https://github.com/mainmatter/rust-advanced-testing-workshop)
+10. [Introduction - The Little Book of Rust Macros](https://lukaswirth.dev/tlborm/)
+11. [All algorithms implemented in Rust - for education](https://github.com/TheAlgorithms/Rust)
+12. [Memory vulnerabilities, written in 100% safe Rust](https://github.com/Speykious/cve-rs)
+
 https://doc.rust-lang.org/stable/book/ch02-00-guessing-game-tutorial.html
 
 Cargo.toml is about describing your dependencies in a broad sense, and is written by you.
