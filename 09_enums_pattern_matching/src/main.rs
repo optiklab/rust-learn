@@ -38,6 +38,8 @@ fn value_in_cents(coin: Coin) -> u8 {
 }
 
 fn main() {
+    let (x, y, z) = (1, 2, 3); // Not an array. Destructure pattern!
+    
     value_in_cents(Coin::Penny);
     value_in_cents(Coin::Nickel);
     value_in_cents(Coin::Dime);

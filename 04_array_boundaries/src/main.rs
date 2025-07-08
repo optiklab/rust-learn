@@ -12,6 +12,8 @@ fn print_array_element(i: i32, index: usize) {
 
 fn main() {
 
+    let (x, y, z) = (1, 2, 3); // Not an array. Destructure pattern!
+
     print_from_loop();
     print_from_for();
     print_from_for_rev();
@@ -73,6 +75,11 @@ fn main() {
         break;
     }
     println!("END");
+
+    let v = vec!['a', 'b', 'c'];
+    for (index, value) in v.iter().enumerate() {
+        println!("{value} is at index {index}");
+    }
 
     println!("### Months print:");
     let months = ["January", "February", "March", "April", "May", "June", "July",

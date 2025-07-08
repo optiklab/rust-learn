@@ -18,6 +18,11 @@ fn main() {
     let absent_number: Option<i32> = None;
 
     let x: i8 = 5;
-    //let y: Option<i8> = Some(5);
+    let y: Option<i8> = Some(5);
     //let sum = x + y; // error[E0277]: cannot add `Option<i8>` to `i8`
+
+    let z = match y {
+        None => None,
+        Some(i) => Some(x + i), // aka = x + y
+    };
 }
