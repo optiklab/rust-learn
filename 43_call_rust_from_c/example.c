@@ -8,3 +8,5 @@ int main() {
     call_from_c();
     return 0;
 }
+
+// Another good similar example is with snappy data compression lib in https://doc.rust-lang.org/nomicon/ffi.html

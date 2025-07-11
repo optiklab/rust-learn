@@ -112,3 +112,23 @@ fn f(u: MyUnion) {
         }
     }
 }
+
+
+
+// https://doc.rust-lang.org/nomicon/ffi.html
+// In C, functions can be 'variadic', meaning they accept a variable
+// number of arguments. This can be achieved in Rust by specifying ... 
+// within the argument list of a foreign function declaration:
+unsafe extern {
+    fn foo(x: i32, ...);
+}
+
+fn call_variadic_func() {
+    unsafe {
+        foo(10, 20, 30, 40, 50);
+    }
+}
+
+
+// Normal Rust functions can not be variadic. This will not compile
+// fn foo(x: i32, ...) {}

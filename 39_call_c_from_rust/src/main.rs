@@ -16,7 +16,7 @@ fn main() {
 // we know it is very safe. So we may simplify the call:
 
 unsafe extern "C" {
-    safe fn abs(input: i32) -> i32;
+    safe fn abs(input: i32) -> i32; // This is a Standard Lib function. No #[link] declarations required.
 }
 // You're telling the Rust compiler:
 // “There exists a function named abs with C calling conventions, 
@@ -41,3 +41,5 @@ fn main() {
 //# Cargo.toml
 //[dependencies]
 //libc = "0.2"
+
+// Another good similar example is with snappy data compression lib in https://doc.rust-lang.org/nomicon/ffi.html
