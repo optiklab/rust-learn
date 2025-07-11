@@ -1,0 +1,9 @@
+[package]
+name = "call_rust_from_c"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+path = "src/lib.rs"
+name = "call_rust_from_c"
+crate-type = ["cdylib"]
