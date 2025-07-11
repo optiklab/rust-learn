@@ -76,6 +76,7 @@ unsafe impl Foo for i32 {
 // Rust can’t verify that our type upholds the guarantees that it can be safely
 // sent across threads or accessed from multiple threads; therefore, we need to 
 // do those checks manually and indicate as such with unsafe.
+// https://doc.rust-lang.org/nomicon/safe-unsafe-meaning.html
 
 ////////////////////////// Accessing Fields of a Union /////////////////////////
 
