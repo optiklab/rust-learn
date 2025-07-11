@@ -1,4 +1,4 @@
-# GCC (BASE)
+0. Create C code that will call Rust code.
 
 On Windows, Rust by default builds a .rlib (Rust static library), 
 not a C-compatible .dll or .lib. To call Rust from C, you need a 
@@ -14,6 +14,8 @@ to build DLL instead of LIB
 
     cargo clean
     cargo build --release
+
+# GCC
 
 3. Link with GCC (make sure to put EXE file in the same folder with DLL)
     gcc example.c -Ltarget/release -lcall_rust_from_c -o target/release/example.exe
