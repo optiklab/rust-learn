@@ -1,4 +1,5 @@
-#include "cxx-demo/include/blobstore.h"
+// In CXX's integration with Cargo, all #include paths begin with a crate name by default
+#include "cxx_bidirectional_interoperability/include/blobstore.h"
 
 BlobstoreClient::BlobstoreClient() {}
 
