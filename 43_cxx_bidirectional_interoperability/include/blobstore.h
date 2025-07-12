@@ -13,8 +13,8 @@ public:
   BlobMetadata metadata(uint64_t blobid) const;
   
 private:
-  class impl;
-  std::shared_ptr<impl> impl;
+  class Implementation;
+  std::shared_ptr<Implementation> pimpl; // unique_ptr actually preferred by Google style guide
 };
 
 std::unique_ptr<BlobstoreClient> new_blobstore_client();
