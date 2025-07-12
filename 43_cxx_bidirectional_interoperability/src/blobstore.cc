@@ -8,6 +8,9 @@
 #include <set>
 #include <string>
 #include <unordered_map>
+#include <iostream>
+
+using namespace std;
 
 std::unique_ptr<BlobstoreClient> new_blobstore_client() {
   return std::unique_ptr<BlobstoreClient>(new BlobstoreClient());
@@ -27,6 +30,7 @@ uint64_t BlobstoreClient::put(MultiBuf &buf) const {
 
   // Pretend we did something useful to persist the data.
   auto blobid = std::hash<std::string>{}(contents);
+  std::cout << "DEBUG OUTPUT: " << contents << std::endl;
   return blobid;
 }
 

@@ -43,7 +43,6 @@ mod ffi {
 fn main() {
     let client = ffi::new_blobstore_client();
 
-
     // Upload a blob.
     let chunks = vec![b"fearless".to_vec(), b"concurrency".to_vec()];
     let mut buf = MultiBuf { chunks, pos: 0 };
