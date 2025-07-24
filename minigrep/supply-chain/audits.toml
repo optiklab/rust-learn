@@ -1,6 +1,16 @@
 
 # cargo-vet audits file
 
+[[audits.hex]]
+who = "Anton Yarkov <antonyarkov@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "0.4.3"
+
+[[audits.sha2]]
+who = "Anton Yarkov <antonyarkov@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "0.10.9"
+
 [[audits.zune-jpeg]]
 who = "Anton Yarkov <antonyarkov@microsoft.com>"
 criteria = "safe-to-deploy"

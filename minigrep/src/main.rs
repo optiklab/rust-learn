@@ -4,6 +4,9 @@ use std::process;
 use minigrep::minigrep_module;
 use minigrep::minigrep_module::Config;
 
+use hex;
+use sha2::{Digest};
+
 // Finds 2 lines with case sensitive search of "to" in poem.txt:
 // cargo run -- to poem.txt
 // 
@@ -41,6 +44,11 @@ fn main() {
 */
 
     println!("Searching for '{}'", config.search_query);
+    println!("Just for curiosity. This query in HEX '{}'", hex::encode(config.search_query.as_str()));
+
+    let mut hasher = sha2::Sha256::new();
+    hasher.update(config.search_query.as_str().as_bytes());
+    println!("Just for curiosity. SHA256 over this query is '{}'", String::from_utf8_lossy(&hasher.finalize()).to_string());
     println!("In file '{}'", config.file_path);
 
     if let Err(e) = minigrep_module::run(config) {
