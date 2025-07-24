@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+zune-jpeg = "0.4.19"
+sha2 = "0.10.9"
+hex = "0.4.3"
 
 [profile.dev]
 opt-level = 0

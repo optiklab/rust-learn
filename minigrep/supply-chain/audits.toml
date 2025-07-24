@@ -1,4 +1,7 @@
 
 # cargo-vet audits file
 
-[audits]
+[[audits.zune-jpeg]]
+who = "Anton Yarkov <antonyarkov@microsoft.com>"
+criteria = "safe-to-deploy"
+version = "0.4.19"
