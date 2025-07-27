@@ -45,6 +45,8 @@ fn main() {
 
     println!("Searching for '{}'", config.search_query);
     println!("Just for curiosity. This query in HEX '{}'", hex::encode(config.search_query.as_str()));
+    println!("Just for curiosity. This query in HEX Manual '{}'", bytes_to_hex(config.search_query.as_bytes()));
+
 
     let mut hasher = sha2::Sha256::new();
     hasher.update(config.search_query.as_str().as_bytes());
@@ -55,6 +57,13 @@ fn main() {
         eprintln!("Application error: {e}");
         process::exit(1); // Exit with error code 1
     }
+}
+
+fn bytes_to_hex(bytes: &[u8]) -> String {
+    bytes.iter()
+        .map(|b| format!("{:02x}", b))
+        .collect::<String>()
+        .to_uppercase()
 }
 
 /*
