@@ -187,6 +187,28 @@ impl Ticket {
             status,
         }
     }
+    // Alternative implementation using Result<T, E>
+    pub fn new_alt(title: String, description: String, status: Status) -> Result<Ticket, String> {
+        if title.is_empty() {
+            return Err("Title cannot be empty".to_string());
+        }
+        if title.len() > 50 {
+            return Err("Title cannot be longer than 50 bytes".to_string());
+        }
+        if description.is_empty() {
+            return Err("Description cannot be empty".to_string());
+        }
+        if description.len() > 500 {
+            return Err("Description cannot be longer than 500 bytes".to_string());
+        }
+
+        Ok(Ticket {
+            title,
+            description,
+            status,
+        })
+    }
+
     pub fn assigned_to(&self) -> &str {
         match &self.status {
             Status::InProgress { assigned_to: person } => person,
@@ -197,6 +219,16 @@ impl Ticket {
                 )
             }
         }
+    }
+
+    // Alternative implementation to use Option<> instead of Panicking.
+    pub fn assigned_to_alt(&self) -> Option<&String> {
+        let result = match &self.status {
+            Status::InProgress { assigned_to } => Some(assigned_to),
+            Status::Done | Status::ToDo => None
+        };
+
+        result
     }
 }
 
