@@ -11,7 +11,7 @@ public:
   uint64_t put(MultiBuf &buf) const;
   void tag(uint64_t blobid, rust::Str tag) const;
   BlobMetadata metadata(uint64_t blobid) const;
-  
+
 private:
   // Below, we are using a common C++ idiom called the 
   // "Pimpl" (Pointer to Implementation) pattern. It hides the implementation 
@@ -25,4 +25,6 @@ private:
   std::shared_ptr<Implementation> pimpl; 
 };
 
+
+/////////////////// This is a C++ code called from Rust ////////////////////////
 std::unique_ptr<BlobstoreClient> new_blobstore_client();

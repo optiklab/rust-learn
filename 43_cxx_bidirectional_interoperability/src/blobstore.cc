@@ -12,15 +12,12 @@
 
 using namespace std;
 
-std::unique_ptr<BlobstoreClient> new_blobstore_client() {
-  return std::unique_ptr<BlobstoreClient>(new BlobstoreClient());
-}
-
 // Upload a new blob and return a blobid that serves as a handle to the blob.
 uint64_t BlobstoreClient::put(MultiBuf &buf) const {
   // Traverse the caller's chunk iterator.
   std::string contents;
   while (true) {
+    // This is a Rust code called from C++
     auto chunk = next_chunk(buf);
     if (chunk.size() == 0) {
       break;
@@ -64,4 +61,9 @@ BlobMetadata BlobstoreClient::metadata(uint64_t blobid) const {
                   [&](auto &t) { metadata.tags.emplace_back(t); });
   }
   return metadata;
+}
+
+/////////////////// This is a C++ code called from Rust ////////////////////////
+std::unique_ptr<BlobstoreClient> new_blobstore_client() {
+  return std::unique_ptr<BlobstoreClient>(new BlobstoreClient());
 }

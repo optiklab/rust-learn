@@ -41,6 +41,7 @@ mod ffi {
 }
 
 fn main() {
+    // This is a C++ code called from Rust
     let client = ffi::new_blobstore_client();
 
     // Upload a blob.
@@ -66,6 +67,7 @@ pub struct MultiBuf {
     pos: usize,
 }
 
+/////////////////// This is a Rust code called from C++ ////////////////////////
 pub fn next_chunk(buf: &mut MultiBuf) -> &[u8] {
     let next = buf.chunks.get(buf.pos);
     buf.pos += 1;
