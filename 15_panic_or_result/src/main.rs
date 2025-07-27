@@ -167,6 +167,7 @@ fn guessing_game() {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Use`Ticket::new` method to return a `Result` instead of panicking.
+////////////////// Use `String` as the error type. ////////////////////////////
 
 #[derive(Debug, PartialEq)]
 struct Ticket {
@@ -182,8 +183,13 @@ enum Status {
     Done,
 }
 
-// Use `String` as the error type.
+enum TicketNewError {
+    TitleError { description: String },
+    DescriptionError { description: String }
+}
+
 impl Ticket {
+    ///////////////////// Use `String` as the error type. //////////////////////
     pub fn new(title: String, description: String, status: Status) -> Result<Ticket, String> {
         if title.is_empty() {
             return Err("Title cannot be empty".to_string());
@@ -204,6 +210,56 @@ impl Ticket {
             status,
         })
     }
+
+    ////////////////// Use `enum` as the error type. ///////////////////////////
+    pub fn new_alt(
+        title: String,
+        description: String,
+        status: Status,
+    ) -> Result<Ticket, TicketNewError> {
+        if title.is_empty() {
+            return Err(TicketNewError::TitleError { description: "Title cannot be empty".to_string() });
+        }
+
+        if title.len() > 50 {
+            return Err(TicketNewError::TitleError { description: "Title cannot be longer than 50 bytes".to_string() });
+        }
+
+        if description.is_empty() {
+            return Err(TicketNewError::DescriptionError { description: "Description cannot be empty".to_string() });
+        }
+
+        if description.len() > 500 {
+            return Err(TicketNewError::DescriptionError { description: "Description cannot be longer than 500 bytes".to_string() });
+        }
+
+        Ok(Ticket {
+            title,
+            description,
+            status,
+        })
+    }
+}
+
+
+fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
+    if title.is_empty() {
+        panic!("Title cannot be empty");
+    }
+    if title.len() > 50 {
+        panic!("Title cannot be longer than 50 bytes");
+    }
+
+    let mut desc = description;
+    if desc.is_empty() || desc.len() > 500 {
+        desc = String::from("Description not provided");
+    }
+
+    Ticket {
+        title,
+        description: desc,
+        status,
+    }
 }
 
 #[cfg(test)]
@@ -211,29 +267,71 @@ mod tests {
     use super::*;
 
     #[test]
-    fn title_cannot_be_empty() {
+    fn new_ticket_title_cannot_be_empty() {
         let error = Ticket::new("".into(), valid_description(), Status::ToDo).unwrap_err();
         assert_eq!(error, "Title cannot be empty");
     }
 
     #[test]
-    fn description_cannot_be_empty() {
+    fn new_alt_ticket_title_cannot_be_empty() {
+        let error: TicketNewError = Ticket::new_alt("".into(), valid_description(), Status::ToDo).unwrap_err();
+        match error {
+            TicketNewError::TitleError { description } => assert_eq!(description, "Title cannot be empty"),
+            TicketNewError::DescriptionError { description } => assert!(false)
+        }
+    }
+
+    #[test]
+    fn new_ticket_description_cannot_be_empty() {
         let error = Ticket::new(valid_title(), "".into(), Status::ToDo).unwrap_err();
         assert_eq!(error, "Description cannot be empty");
     }
 
     #[test]
-    fn title_cannot_be_longer_than_fifty_chars() {
+    fn new_alt_ticket_description_cannot_be_empty() {
+        let error: TicketNewError = Ticket::new_alt(valid_title(), "".into(), Status::ToDo).unwrap_err();
+        match error {
+            TicketNewError::TitleError { description } => assert!(false),
+            TicketNewError::DescriptionError { description } => assert_eq!(description, "Description cannot be empty")
+        }
+    }
+
+    #[test]
+    fn new_ticket_title_cannot_be_longer_than_fifty_chars() {
         let error =
             Ticket::new(overly_long_title(), valid_description(), Status::ToDo).unwrap_err();
         assert_eq!(error, "Title cannot be longer than 50 bytes");
     }
 
     #[test]
-    fn description_cannot_be_longer_than_500_chars() {
+    fn new_ticket_description_cannot_be_longer_than_500_chars() {
         let error =
             Ticket::new(valid_title(), overly_long_description(), Status::ToDo).unwrap_err();
         assert_eq!(error, "Description cannot be longer than 500 bytes");
+    }
+
+    #[test]
+    #[should_panic(expected = "Title cannot be empty")]
+    fn easy_ticket_title_cannot_be_empty() {
+        easy_ticket("".into(), valid_description(), Status::ToDo);
+    }
+
+    #[test]
+    fn easy_ticket_template_description_is_used_if_empty() {
+        let ticket = easy_ticket(valid_title(), "".into(), Status::ToDo);
+        assert_eq!(ticket.description, "Description not provided");
+    }
+
+    #[test]
+    #[should_panic(expected = "Title cannot be longer than 50 bytes")]
+    fn easy_ticket_title_cannot_be_longer_than_fifty_chars() {
+        easy_ticket(overly_long_title(), valid_description(), Status::ToDo);
+    }
+
+    #[test]
+    fn easy_ticket_template_description_is_used_if_too_long() {
+        let ticket = easy_ticket(valid_title(), overly_long_description(), Status::ToDo);
+        assert_eq!(ticket.description, "Description not provided");
     }
     
     pub fn overly_long_description() -> String {
@@ -251,6 +349,4 @@ mod tests {
     pub fn valid_description() -> String {
         "A description".into()
     }
-
 }
-
