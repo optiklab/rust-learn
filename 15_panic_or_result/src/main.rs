@@ -6,6 +6,8 @@ use std::io::{self, Read};
 use std::net::IpAddr;
 use rand::Rng;
 use std::cmp::Ordering;
+use std::fmt; // For Error + Debug + Display trait.
+use std::error::Error; // For Error trait.
 
 fn read_username_from_file() -> Result<String, io::Error> {
     let username_file_result = File::open("hello.txt");
@@ -183,9 +185,29 @@ enum Status {
     Done,
 }
 
+#[derive(Debug)]
 enum TicketNewError {
     TitleError { description: String },
     DescriptionError { description: String }
+}
+
+// EVERY ERROR ENUM HAVE TO IMLPEMENT ERROR TRAIT + DEBUG + DISPLAY.
+impl fmt::Display for TicketNewError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            TicketNewError::TitleError { description } => write!(f, "{}", description),
+            TicketNewError::DescriptionError { description } => write!(f, "{}", description)
+        }
+    }
+}
+
+impl Error for TicketNewError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match &self {
+            TicketNewError::TitleError { description: _ } => Some(self),
+            TicketNewError::DescriptionError { description: _ } => Some(self)
+        }
+    }
 }
 
 impl Ticket {
