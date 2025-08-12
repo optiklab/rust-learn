@@ -1,5 +1,5 @@
 [package]
-name = "custom_error_handling_thiserror"
+name = "error_handling_thiserror"
 version = "0.1.0"
 edition = "2024"
 
