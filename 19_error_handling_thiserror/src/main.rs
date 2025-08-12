@@ -124,10 +124,85 @@ impl TryFrom<&str> for Status3 {
 ////////////////////////////  End of Into() & From()  //////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////// Error source and propagation ////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+use crate::status::Status;
+use crate::status::ParseStatusError;
+
+// We've seen how to declare modules in one of the earliest exercises, but
+// we haven't seen how to extract them into separate files.
+// Let's fix that now!
+//
+// In the simplest case, when the extracted module is a single file, it is enough to
+// create a new file with the same name as the module and move the module content there.
+// The module file should be placed in the same directory as the file that declares the module.
+// In this case, `src/lib.rs`, thus `status.rs` should be placed in the `src` directory.
+mod status;
+
+// TODO: Add a new error variant to `TicketNewError` for when the status string is invalid.
+//   When calling `source` on an error of that variant, it should return a `ParseStatusError` rather than `None`.
+
+#[derive(Debug, thiserror::Error)]
+pub enum TicketNewError {
+    #[error("Title cannot be empty")]
+    TitleCannotBeEmpty,
+    #[error("Title cannot be longer than 50 bytes")]
+    TitleTooLong,
+    #[error("Description cannot be empty")]
+    DescriptionCannotBeEmpty,
+    #[error("Description cannot be longer than 500 bytes")]
+    DescriptionTooLong,
+    #[error("{0}")]
+    StatusInvalid(#[from] ParseStatusError),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Ticket {
+    title: String,
+    description: String,
+    status: Status,
+}
+
+impl Ticket {
+    pub fn new(title: String, description: String, status: String) -> Result<Self, TicketNewError> {
+        if title.is_empty() {
+            return Err(TicketNewError::TitleCannotBeEmpty);
+        }
+        if title.len() > 50 {
+            return Err(TicketNewError::TitleTooLong);
+        }
+        if description.is_empty() {
+            return Err(TicketNewError::DescriptionCannotBeEmpty);
+        }
+        if description.len() > 500 {
+            return Err(TicketNewError::DescriptionTooLong);
+        }
+
+        // Parse the status string into a `Status` enum.
+        let valid_status = Status::try_from(status)?;
+
+        Ok(Ticket {
+            title,
+            description,
+            status: valid_status,
+        })
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/////////// End of Error source and propagation
+////////////////////////////////////////////////////////////////////////////////
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
+    // Helpers
     pub fn overly_long_description() -> String {
         "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.".into()
     }
@@ -143,9 +218,8 @@ mod tests {
     pub fn valid_description() -> String {
         "A description".into()
     }
-
     // End of Helpers
-    
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// this error tests ////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -204,5 +278,26 @@ mod tests {
         let status = Status3::try_from("done").unwrap();
         assert_eq!(status, Status3::Done);
     }
+
+////////////////////////////////////////////////////////////////////////////////
+/////////// Tests for Error source and propagation
+////////////////////////////////////////////////////////////////////////////////
+
+    use std::error::Error;
+
+    use super::*;
+
+    #[test]
+    fn invalid_status() {
+        let err = Ticket::new(valid_title(), valid_description(), "invalid".into()).unwrap_err();
+        assert_eq!(
+            err.to_string(),
+            "`invalid` is not a valid status. Use one of: ToDo, InProgress, Done"
+        );
+        assert!(err.source().is_some());
+    }
 }
+
+
+
 
