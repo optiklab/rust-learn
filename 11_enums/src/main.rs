@@ -66,7 +66,10 @@ enum IpAddrStructed {
     V4(Ipv4Addr),
     V6(Ipv6Addr)
 }
+
+////////////////////////////////////////////////////////////////////////////////
 //////////////////////////Enum with attached enum///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #[derive(Debug)]
 enum Message {
     Quit,                      // Analog of   struct QuitMessage; // unit struct
@@ -79,7 +82,9 @@ enum Message {
     ChangeColor(i32, i32, i32),// Analog of    struct ChangeColorMessage(i32, i32, i32); // tuple struct
     GetAddressKind(IpAddrKind) // Enum value of enum
 }
+////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////Enum with methods//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 impl Message {
     fn call(&self) {
         println!("Message call: {:?}", self);
@@ -104,4 +109,101 @@ fn main() {
 
 fn route(ip_kind: IpAddrKind) {
     println!("IP Kind: {:?}", ip_kind);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////Enum with various types of data///////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+struct Point {
+    x: u64,
+    y: u64,
+}
+
+enum MessageConstruct {
+    Resize { width: u64, height: u64 },
+    Move(Point),
+    Echo(String),
+    ChangeColor(u8, u8, u8),
+    Quit,
+}
+
+struct State {
+    width: u64,
+    height: u64,
+    position: Point,
+    message: String,
+    // RGB color composed of red, green and blue.
+    color: (u8, u8, u8),
+    quit: bool,
+}
+
+impl State {
+    fn resize(&mut self, width: u64, height: u64) {
+        self.width = width;
+        self.height = height;
+    }
+
+    fn move_position(&mut self, point: Point) {
+        self.position = point;
+    }
+
+    fn echo(&mut self, s: String) {
+        self.message = s;
+    }
+
+    fn change_color(&mut self, red: u8, green: u8, blue: u8) {
+        self.color = (red, green, blue);
+    }
+
+    fn quit(&mut self) {
+        self.quit = true;
+    }
+
+    fn process(&mut self, message: MessageConstruct) {
+
+        match message {
+            MessageConstruct::Resize { width, height } => {
+                self.width = width;
+                self.height = height;
+            },
+            MessageConstruct::Move(point) => self.position = point,
+            MessageConstruct::Echo(echo) => self.message = echo,
+            MessageConstruct::ChangeColor(r, g, b) => self.color = (r, g, b),
+            MessageConstruct::Quit => self.quit = true
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_match_message_call() {
+        let mut state = State {
+            width: 0,
+            height: 0,
+            position: Point { x: 0, y: 0 },
+            message: String::from("hello world"),
+            color: (0, 0, 0),
+            quit: false,
+        };
+
+        state.process(MessageConstruct::Resize {
+            width: 10,
+            height: 30,
+        });
+        state.process(MessageConstruct::Move(Point { x: 10, y: 15 }));
+        state.process(MessageConstruct::Echo(String::from("Hello world!")));
+        state.process(MessageConstruct::ChangeColor(255, 0, 255));
+        state.process(MessageConstruct::Quit);
+
+        assert_eq!(state.width, 10);
+        assert_eq!(state.height, 30);
+        assert_eq!(state.position.x, 10);
+        assert_eq!(state.position.y, 15);
+        assert_eq!(state.message, "Hello world!");
+        assert_eq!(state.color, (255, 0, 255));
+        assert!(state.quit);
+    }
 }

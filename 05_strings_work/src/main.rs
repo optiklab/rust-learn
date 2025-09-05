@@ -66,6 +66,15 @@ fn main() {
     return_cortage_by_ref();
 
     slicing();
+
+    ///// Mutability and order of calls.
+    let data = "Rust is great!".to_string();
+    //get_char(data);          <--- ❌ WRONG!  Look into order of calls.
+    //string_uppercase(&data); <--- ❌ WRONG!  Look into order of calls.
+    get_char(&data);
+    string_uppercase(data);
+
+    ////
 }
 
 fn copy_or_not() {
@@ -175,4 +184,74 @@ fn slicing() {
     }
 
     println!("'{hindi}': {} bytes in total", hindi.bytes().count());
+}
+
+
+
+///////////////////////////////////// Mutability //////////////////////////////
+
+// Shouldn't take ownership
+//fn get_char(data: String) -> char {<--- ❌ WRONG! Look into order of calls.
+fn get_char(data: &String) -> char {
+    data.chars().last().unwrap()
+}
+
+// Should take ownership
+// fn string_uppercase(mut data: &String) {<--- ❌ WRONG! Look into order of calls.
+fn string_uppercase(mut data: String) {
+    data = data.to_uppercase();
+
+    println!("{data}");
+}
+
+
+
+fn trim_me(input: &str) -> &str {
+    // TODO: Remove whitespace from both ends of a string.
+    input.trim()
+}
+
+fn compose_me(input: &str) -> String {
+    // TODO: Add " world!" to the string! There are multiple ways to do this.
+    [input, String::from(" world!").as_str()].concat()
+}
+
+fn replace_me(input: &str) -> String {
+    // TODO: Replace "cars" in the string with "balloons".
+    input.replace("cars", "balloons")
+}
+
+//////////////////////////////////////////////////////////////////////
+// Here are a bunch of values - some are `String`, some are `&str`.
+//////////////////////////////////////////////////////////////////////
+fn what_is_what() {
+    string_slice("blue");
+
+    string("red".to_string());
+
+    string(String::from("hi"));
+
+    string("rust is fun!".to_owned());
+
+    string_slice("nice weather".into());
+
+    string(format!("Interpolation {}", "Station"));
+
+    // WARNING: This is byte indexing, not character indexing.
+    // Character indexing can be done using `s.chars().nth(INDEX)`.
+    string_slice(&String::from("abc")[0..1]);
+
+    string_slice("  hello there ".trim());
+
+    string("Happy Monday!".replace("Mon", "Tues"));
+
+    string("mY sHiFt KeY iS sTiCkY".to_lowercase());
+}
+
+fn string_slice(arg: &str) {
+    println!("{arg}");
+}
+
+fn string(arg: String) {
+    println!("{arg}");
 }

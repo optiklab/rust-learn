@@ -47,7 +47,7 @@ fn main() {
     println!("Just for curiosity. This query in HEX '{}'", hex::encode(config.search_query.as_str()));
     println!("Just for curiosity. This query in HEX Manual '{}'", bytes_to_hex(config.search_query.as_bytes()));
 
-
+    // This part is not related to the main aim of this app/code. This is just for testing sha2 package:
     let mut hasher = sha2::Sha256::new();
     hasher.update(config.search_query.as_str().as_bytes());
     println!("Just for curiosity. SHA256 over this query is '{}'", String::from_utf8_lossy(&hasher.finalize()).to_string());

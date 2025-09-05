@@ -36,6 +36,41 @@ fn main() {
         println!("my_vec # Element at index {}: {}", i, value);
     }
 
+    /* FOR LOOP
+    Every time you write a `for` loop in Rust, the compiler _desugars_ it into the following code:
+    ```rust
+    let mut iter = IntoIterator::into_iter(v);
+    loop {
+        match iter.next() {
+            Some(n) => {
+                println!("{}", n);
+            }
+            None => break,
+        }
+    }
+    ```
+    The `next` method in the previous code snippet comes from the `Iterator` trait.
+    The `Iterator` trait is defined in Rust's standard library and provides a shared interface for
+    types that can produce a sequence of values:
+
+    ```rust
+    trait Iterator {
+        type Item;
+        fn next(&mut self) -> Option<Self::Item>;
+    }
+    ```
+
+    The `Item` associated type specifies the type of the values produced by the iterator.
+
+    `next` returns the next value in the sequence.\
+    It returns `Some(value)` if there's a value to return, and `None` when there isn't.
+
+    Be careful: there is no guarantee that an iterator is exhausted when it returns `None`. That's only
+    guaranteed if the iterator implements the (more restrictive)
+    [`FusedIterator`](https://doc.rust-lang.org/std/iter/trait.FusedIterator.html) trait.
+
+    */
+
     let third: &i32 = &my_vec[2];
     println!("my_vec # Third element: {}", third);
     let second: Option<&i32> = my_vec.get(1);
@@ -57,6 +92,12 @@ fn main() {
     for i in 0..vec.len() {
         println!("vec #Element at index {}: {}", i, vec[i]);
     }
+    /*
+    Iterating over iterators has a nice side effect: you can't go out of bounds, by design.
+    This allows Rust to remove bounds checks from the generated machine code, making iteration faster.
+    In general, prefer iteration to indexing where possible.
+    */
+
     println!("vec #Vector length: {}", vec.len());
     println!("vec #Vector capacity: {}", vec.capacity());
     vec.push(6);
@@ -242,3 +283,102 @@ fn main() {
     }
 }
 
+fn vec_loop(input: &[i32]) -> Vec<i32> {
+    let mut output = Vec::new();
+
+    for element in input {
+        // Multiply each element in the `input` slice by 2
+        output.push(element*2);
+    }
+
+    output
+}
+
+fn vec_map_example(input: &[i32]) -> Vec<i32> {
+    // An example of collecting a vector after mapping.
+    // We map each element of the `input` slice to its value plus 1.
+    // If the input is `[1, 2, 3]`, the output is `[2, 3, 4]`.
+    input.iter().map(|element| element + 1).collect()
+}
+
+fn vec_map(input: &[i32]) -> Vec<i32> {
+    // Multiply each element in the `input` slice by 2, but with iterator 
+    // mapping instead of manually pushing into an empty vector.
+    input
+        .iter()
+        .map(|element| {
+            element * 2
+        })
+        .collect()
+}
+
+fn array_and_vec() -> ([i32; 4], Vec<i32>) {
+    let a = [10, 20, 30, 40]; // Array
+
+    // Vector called `v` which contains the exact same elements as in the array `a`.
+    let v = vec![a[0],a[1],a[2],a[3]];
+    //Alternative: simply create with Vec::new() and then push() elements.
+    (a, v)
+}
+
+///////////////////////////////////// Mutability with vectors /////////////////
+
+fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
+    let mut vec = vec;
+
+    vec.push(88);
+
+    vec
+}
+
+fn fill_vec2(mut vec: Vec<i32>) -> Vec<i32> {
+    vec.push(88);
+
+    vec
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn move_semantics1() {
+        let vec0 = vec![22, 44, 66];
+        let vec1 = fill_vec(vec0);
+        assert_eq!(vec1, vec![22, 44, 66, 88]);
+
+        // but `vec0` not accessible after
+    }
+    
+    #[test]
+    fn move_semantics2() {
+        let vec0 = vec![22, 44, 66];
+
+        // Make both vectors `vec0` and `vec1` accessible after
+        let vec1 = fill_vec(vec0.clone());
+
+        assert_eq!(vec0, [22, 44, 66]);
+        assert_eq!(vec1, [22, 44, 66, 88]);
+    }
+
+    #[test]
+    fn move_semantics3() {
+        let vec0 = vec![22, 44, 66];
+        let vec1 = fill_vec2(vec0);
+        assert_eq!(vec1, [22, 44, 66, 88]);
+    }
+
+    fn move_semantics4() {
+        let mut x = Vec::new();
+        let y = &mut x;  //    <---
+        // WRONG:
+        // let z = &mut x;                    <--- ❌ WRONG! 
+        // y.push(42);    
+        // z.push(13);
+        // assert_eq!(x, [42, 13]);
+        y.push(42);                     //    <--- ✅
+        let z = &mut x;  //    <--- ✅
+        z.push(13);
+        assert_eq!(x, [42, 13]);
+    }
+}

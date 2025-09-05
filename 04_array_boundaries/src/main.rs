@@ -37,6 +37,41 @@ fn main() {
     }
     println!("END");
 
+    /* FOR LOOP
+    Every time you write a `for` loop in Rust, the compiler _desugars_ it into the following code:
+    ```rust
+    let mut iter = IntoIterator::into_iter(v);
+    loop {
+        match iter.next() {
+            Some(n) => {
+                println!("{}", n);
+            }
+            None => break,
+        }
+    }
+    ```
+    The `next` method in the previous code snippet comes from the `Iterator` trait.
+    The `Iterator` trait is defined in Rust's standard library and provides a shared interface for
+    types that can produce a sequence of values:
+
+    ```rust
+    trait Iterator {
+        type Item;
+        fn next(&mut self) -> Option<Self::Item>;
+    }
+    ```
+
+    The `Item` associated type specifies the type of the values produced by the iterator.
+
+    `next` returns the next value in the sequence.\
+    It returns `Some(value)` if there's a value to return, and `None` when there isn't.
+
+    Be careful: there is no guarantee that an iterator is exhausted when it returns `None`. That's only
+    guaranteed if the iterator implements the (more restrictive)
+    [`FusedIterator`](https://doc.rust-lang.org/std/iter/trait.FusedIterator.html) trait.
+
+    */
+
     println!("###let c = [77; 10]");
     let c = [77; 10]; // Array of 10 i32 elements, each of value 5
     print_array_element(c[0], 0);    
@@ -57,6 +92,8 @@ fn main() {
 
     println!("###!Warning! Potentially unsafe behavior! Get an element from array by index!");
 
+    // `loop` is another looping construct, on top of `for` and `while`.
+    // A `loop` block will run forever, unless you explicitly `break` out of it.
     loop {
         println!("Type an index:");
 
@@ -80,6 +117,12 @@ fn main() {
     for (index, value) in v.iter().enumerate() {
         println!("{value} is at index {index}");
     }
+
+    /*
+    Iterating over iterators has a nice side effect: you can't go out of bounds, by design.
+    This allows Rust to remove bounds checks from the generated machine code, making iteration faster.
+    In general, prefer iteration to indexing where possible.
+    */
 
     println!("### Months print:");
     let months = ["January", "February", "March", "April", "May", "June", "July",
@@ -120,6 +163,11 @@ fn print_from_for() {
         println!("{}", number);
     }
     println!("END");
+    /*
+    Iterating over iterators has a nice side effect: you can't go out of bounds, by design.
+    This allows Rust to remove bounds checks from the generated machine code, making iteration faster.
+    In general, prefer iteration to indexing where possible.
+    */
 }
 
 fn print_from_for_rev() {
@@ -129,4 +177,9 @@ fn print_from_for_rev() {
         println!("{}", number);
     }
     println!("END");
+    /*
+    Iterating over iterators has a nice side effect: you can't go out of bounds, by design.
+    This allows Rust to remove bounds checks from the generated machine code, making iteration faster.
+    In general, prefer iteration to indexing where possible.
+    */
 }
