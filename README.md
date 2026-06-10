@@ -1,4 +1,4 @@
-# References
+## References
 
 1. Official free public book on [The Rust Programming Language](https://doc.rust-lang.org/stable/book/title-page.html)
 - [Language Reference](https://doc.rust-lang.org/reference/)
@@ -9,14 +9,14 @@
 5. Free course on Rust from [Google Android team](https://google.github.io/comprehensive-rust/)
 6. Introduction to [Rust in Chromium](https://google.github.io/comprehensive-rust/chromium)
 7. C++ and Rust interoperability:
-- [ref Chromium](https://google.github.io/comprehensive-rust/chromium/interoperability-with-cpp.html)
+- [ref Chromium](https://google.github.io/comprehensive-rust/chromium/iVnteroperability-with-cpp.html)
 - [ref The Book](https://doc.rust-lang.org/nomicon/ffi.html)
 8. Some nice Tips & Tricks in [Rust Antology](https://brson.github.io/rust-anthology)
 9. [Advanced on testing](https://github.com/mainmatter/rust-advanced-testing-workshop)
 10. [Introduction - The Little Book of Rust Macros](https://lukaswirth.dev/tlborm/)
 11. [All algorithms implemented in Rust - for education](https://github.com/TheAlgorithms/Rust)
 12. [Memory vulnerabilities, written in 100% safe Rust](https://github.com/Speykious/cve-rs)
-
+q12
 https://doc.rust-lang.org/stable/book/ch02-00-guessing-game-tutorial.html
 
 Cargo.toml is about describing your dependencies in a broad sense, and is written by you.
@@ -30,6 +30,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     ```
 
     $> rustup
+    $> rustup update
 
     $> cd hello_world
     $> rustc main.rs
@@ -39,7 +40,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     $> cargo update
 
 
-#Create Binary (aka App) crate/package
+## Create Binary (aka App) crate/package
 
     $> cargo new hello_cargo
 
@@ -52,15 +53,15 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     Binary crates published to crates.io are installable:
     $> cargo install ripgrep
 
-##Extending Cargo with Custom Commands
+### Extending Cargo with Custom Commands
 
     Cargo is designed so you can extend it with new subcommands without having to modify it. If a binary in your $PATH is named cargo-something, you can run it as if it were a Cargo subcommand by running cargo something. Custom commands like this are also listed when you run cargo --list. Being able to use cargo install to install extensions and then run them just like the built-in Cargo tools is a super convenient benefit of Cargo’s design!
 
-#Create Lib package
+## Create Lib package
 
     $> cargo new adder --lib
 
-#Alternatively, create Workspace for more complex project of many packages
+## Alternatively, create Workspace for more complex project of many packages
 
     Create project folder and create Cargo.toml file manually.
 
@@ -92,7 +93,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     package uses the same version of public crate and will take care of 
     efficient usage by using single copy of public crate for all packages in workspace.
 
-#Build package
+## Build package
 
     $> cargo check - just to check if it compiles
 
@@ -103,28 +104,28 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     $> cargo build --release
         Builds `release` profile [optimized] target(s) configured as [profile.release] in Cargo.toml.
 
-#Run package
+## Run package
 
     $> cargo run
     $> RUST_BACKTRACE=1 cargo run
 
-#Run package from Workspace
+## Run package from Workspace
 
     Workspace usually contains multiple packages, so we need to specify which to run:
     $> cargo run -p adder
 
-#Open docs and run doc tests
+## Open docs and run doc tests
 
     $> cargo doc --open
 
-#Explore
+## Explore
 
     $> cargo install cargo-expand
     $> cargo expand - to see how "derived" actually look like
 
-#Tests
+## Tests
 
-##Unit tests
+### Unit tests
 
     ├── Cargo.lock
     ├── Cargo.toml
@@ -133,7 +134,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
         or        
         └── lib.rs  <-- both code and unit-tests are here
 
-##Integration tests
+### Integration tests
 
     We cannot create integration tests for App project. Only for lib-project:
     $>cargo new project_with_integration_tests --lib
@@ -155,7 +156,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
         └── common.rs  <-- each file - separate crate. Wrong way to share code.
                            Will also appear in the test output!
 
-#Build & run tests
+## Build & run tests
 
     Run test for a package/module. It runs both unit and integrations tests,
     as well as also documentation tests.
@@ -193,7 +194,7 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
     If you don’t want to run the tests in parallel or if you want more fine-grained control over the number of threads:
     $> cargo test -- --test-threads=1
 
-#Publish crates
+## Publish crates
 
     Follow https://doc.rust-lang.org/stable/book/ch14-02-publishing-to-crates-io.html
     to re-export your modules in a necessary and user-friendly way.
@@ -220,3 +221,36 @@ Cargo.lock contains exact information about your dependencies. It is maintained 
 
     Or stop deprecating version:
     $> cargo yank --vers 1.0.1 --undo
+
+## Check dependencies quality
+
+$> cargo install --locked cargo-aprz
+
+Run default:
+$> argo aprz crates tokio
+
+Generate a default configuration file:
+$> cargo aprz init
+
+Get the metrics associated with the dependencies of a Rust project:
+$> cargo aprz deps
+
+Get the metrics for specific versions of crates:
+$> cargo aprz crates tokio@1.40.0 serde@1.0.0
+
+Get the metrics for a crate and produce an HTML report instead of outputting to the console:
+$> cargo aprz crates tokio@1.40.0 --html report.html
+
+$> cargo aprz deps --github-token <GITHUB_TOKEN> --codeberg-token <CODEBERG_TOKEN>
+
+Outputs:
+$> cargo aprz crates tokio                     # Terminal output (default)
+$> cargo aprz crates tokio --console           # Terminal output (explicit)
+$> cargo aprz crates tokio --html report.html  # HTML report
+$> cargo aprz crates tokio --json report.json  # JSON data
+$> cargo aprz crates tokio --csv report.csv    # CSV file
+$> cargo aprz crates tokio --excel report.xlsx # Excel spreadsheet
+
+### Links:
+https://libraries.io/cargo/cargo-aprz
+https://crates.io/crates/cargo-aprz
